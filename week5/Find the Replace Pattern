@@ -1,0 +1,39 @@
+class Solution {
+    public List<String> findAndReplacePattern(String[] words, String pattern) {
+        List<String> result = new ArrayList<>();
+        for (String word : words) {
+            if (matches(word, pattern)) {
+                result.add(word);
+            }
+        }
+        return result;
+    }
+
+    private boolean matches(String word, String pattern) {
+        if (word.length() != pattern.length()) {
+            return false;
+        }
+
+        int[] wToP = new int[128];
+        int[] pToW = new int[128];
+        java.util.Arrays.fill(wToP, -1);
+        java.util.Arrays.fill(pToW, -1);
+
+        for (int i = 0; i < word.length(); i++) {
+            char wChar = word.charAt(i);
+            char pChar = pattern.charAt(i);
+
+            if (wToP[wChar] != -1 && wToP[wChar] != pChar) {
+                return false;
+            }
+            if (pToW[pChar] != -1 && pToW[pChar] != wChar) {
+                return false;
+            }
+
+            wToP[wChar] = pChar;
+            pToW[pChar] = wChar;
+        }
+
+        return true;
+    }
+}
