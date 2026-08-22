@@ -1,0 +1,67 @@
+import java.io.*;
+import java.util.*;
+import java.util.stream.*;
+import static java.util.stream.Collectors.toList;
+
+public class Solution {
+    public static List<Integer> maxSubarray(List<Integer> arr) {
+        int currentSubarraySum = arr.get(0);
+        int maxSubarraySum = arr.get(0);
+        
+        int maxSubsequenceSum = arr.get(0);
+        int maxElement = arr.get(0);
+        boolean allNegative = true;
+        
+        if (arr.get(0) > 0) {
+            allNegative = false;
+        }
+
+        for (int i = 1; i < arr.size(); i++) {
+            int val = arr.get(i);
+            
+            currentSubarraySum = Math.max(val, currentSubarraySum + val);
+            maxSubarraySum = Math.max(maxSubarraySum, currentSubarraySum);
+            
+            if (val > 0) {
+                if (allNegative) {
+                    maxSubsequenceSum = val;
+                    allNegative = false;
+                } else {
+                    maxSubsequenceSum += val;
+                }
+            } else {
+                if (allNegative) {
+                    maxSubsequenceSum = Math.max(maxSubsequenceSum, val);
+                }
+            }
+            
+            maxElement = Math.max(maxElement, val);
+        }
+        
+        if (allNegative) {
+            maxSubsequenceSum = maxElement;
+        }
+        
+        return Arrays.asList(maxSubarraySum, maxSubsequenceSum);
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+
+        int t = Integer.parseInt(bufferedReader.readLine().trim());
+
+        for (int tItr = 0; tItr < t; tItr++) {
+            int n = Integer.parseInt(bufferedReader.readLine().trim());
+
+            List<Integer> arr = Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                .map(Integer::parseInt)
+                .collect(toList());
+
+            List<Integer> result = Solution.maxSubarray(arr);
+
+            System.out.println(result.get(0) + " " + result.get(1));
+        }
+
+        bufferedReader.close();
+    }
+}
