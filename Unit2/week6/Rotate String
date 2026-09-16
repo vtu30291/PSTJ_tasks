@@ -8,4 +8,4 @@ class Solution {
         String doubled = s + s;
         return doubled.contains(goal);
     }
-}task2
+}
